@@ -9,6 +9,7 @@ import {
 import { Wallet } from "lucide-react"
 import { useEffect, useState } from "react"
 import CustomBtn from "./CustomButton"
+import { useNavigate } from "react-router-dom"
 
 function WalletConnector() {
 
@@ -42,7 +43,6 @@ function WalletConnector() {
     setSelectedConnector(connector.name)
 
     connect({ connector })
-
 
   }
 

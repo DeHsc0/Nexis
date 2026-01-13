@@ -1,6 +1,6 @@
 import { http, createConfig } from 'wagmi'
 import { base, mainnet , sepolia } from 'wagmi/chains'
-import { injected, safe  } from 'wagmi/connectors'
+import { injected, safe } from 'wagmi/connectors'
 
 
 export const config = createConfig({
