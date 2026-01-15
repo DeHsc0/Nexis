@@ -1,6 +1,6 @@
 
 import WalletConnector from "../components/WalletConnector";
-import gsap from "gsap/all";
+import gsap from "gsap";
 import { useGSAP } from "@gsap/react"
 import { useAccount, useReconnect } from "wagmi";
 import { useEffect } from "react";

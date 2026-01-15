@@ -16,20 +16,21 @@ import {
 import type { Chain } from "viem"
 import AssetOverview from "@/components/AssetOverview"
 import { toast } from "sonner"
+import SendRecieveTrans from "@/components/SendRecieveTrans"
 
 function Dashboard (){
 
     const { isConnected , isDisconnected  } = useAccount()
     
-    const navigate = useNavigate()
-
-    const { disconnect } = useDisconnect()
-
     const switchChain = useSwitchChain()
         
     const chains = useChains()
 
-    const [ selectedChain , setSelectedChain ] = useState<Chain | undefined>(chains.find((chain ) => chain.name === "Ethereum" ) ?? chains[0] )
+    const navigate = useNavigate()
+
+    const { disconnect } = useDisconnect()
+
+    const [ selectedChain , setSelectedChain ] = useState<Chain>(chains.find((chain ) => chain.name === "Ethereum" ) ?? chains[0] )
 
     const handleValueChange = ( value : string ) => {
 
@@ -44,18 +45,23 @@ function Dashboard (){
 
         })
 
+
     }    
 
     useEffect( () => {
 
         if(!isConnected || isDisconnected )navigate("/")
 
+        switchChain.mutate({ chainId : selectedChain.id})
+
+        
+
     } , [])
 
 
     return <>
 
-        <nav className="py-5 px-24 bg-slate-900/45 flex items-center justify-between">
+        <nav className="py-5 px-24 bg-slate-800/45 flex items-center justify-between">
 
             <div className="flex items-center gap-3">
                 <div className="p-2 text-slate-900 bg-white rounded-lg">
@@ -94,9 +100,25 @@ function Dashboard (){
 
         </nav>
 
-        <main className="px-24 flex my-8">
+        <main className="px-24 flex my-8 ">
 
-            <AssetOverview/>
+            <div className="w-full flex flex-col gap-4">
+
+                <AssetOverview/>
+
+                <div className="grid grid-cols-4 w-full">
+
+                    <div className="col-span-2 w-full">
+
+                        <SendRecieveTrans/>
+                        
+                    </div>
+
+                </div>
+
+
+            </div>
+
 
         </main>
         
