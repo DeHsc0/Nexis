@@ -17,6 +17,7 @@ import type { Chain } from "viem"
 import AssetOverview from "@/components/AssetOverview"
 import { toast } from "sonner"
 import SendRecieveTrans from "@/components/SendRecieveTrans"
+import MessageSign from "@/components/MessageSign"
 
 function Dashboard (){
 
@@ -106,13 +107,13 @@ function Dashboard (){
 
                 <AssetOverview/>
 
-                <div className="grid grid-cols-4 w-full">
-
-                    <div className="col-span-2 w-full">
+                <div className="grid grid-cols-2 w-full gap-5 ">
 
                         <SendRecieveTrans/>
-                        
-                    </div>
+
+
+                        <MessageSign />                        
+
 
                 </div>
 
