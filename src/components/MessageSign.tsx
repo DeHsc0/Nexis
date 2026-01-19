@@ -1,7 +1,42 @@
 import { PenTool } from "lucide-react";
 import { Button } from "./ui/button";
+import { useState } from "react";
+import { useSignMessage } from "wagmi";
+import { toast } from "sonner";
 
 function MessageSign  () {
+
+    const [ msg , setMsg ] = useState<string | undefined>() 
+
+    const signMessage = useSignMessage({
+        mutation : {
+
+            onSuccess() {
+
+                toast("Message Signed Successfully")
+                                
+            },
+
+            onError( error) {
+
+                toast(`Signing Failed : ${error.message}`)
+
+            }
+
+        }
+    })
+
+    const handleMessageSign =  () => {
+
+        if(!msg)return 
+
+        signMessage.mutate({
+
+            message : msg
+
+        })
+
+    }
 
     return (
         <div className="px-8 py-6 flex flex-col gap-4 bg-slate-800/45 rounded-2xl">
@@ -22,9 +57,9 @@ function MessageSign  () {
                 Prove ownership of your address by signing a message. This action does not incur gas fees
             </p>
 
-            <textarea placeholder="Enter message to sign." className="h-28 bg-zinc-700/50 rounded-2xl border-2 hover:border-white/45  px-3 py-2 text-white "/>
+            <textarea placeholder="Enter message to sign." onChange={(e) => setMsg(e.currentTarget.value) } className="h-full bg-zinc-700/50 rounded-2xl border-2 hover:border-white/45  px-3 py-2 text-white "/>
 
-            <Button variant={"outline"} className="font-manrope-regular text-[#4F46E5] border-[#4F46E5] hover:text-[#4F46E5]">Sign Message</Button>
+            <Button onClick={handleMessageSign} variant={"outline"} className="font-manrope-regular text-[#4F46E5] border-[#4F46E5] hover:text-[#4F46E5]">Sign Message</Button>
             
         </div>
     )

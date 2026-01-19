@@ -1,28 +1,50 @@
-import { useAccount, useBalance } from "wagmi"
+import { useAccount, useBalance, useChainId, useChains } from "wagmi"
 import { Button } from "./ui/button"
 import { Activity, Gem } from "lucide-react"
 import { useEffect, useState } from "react"
-
+import { toast } from "sonner"
+import { formatEther } from "viem"
 
 function AssetOverview () {
 
     const { address } = useAccount()
+
     const { data , refetch } = useBalance({ address }) 
 
-    const [ currentPrice , setCurrentPrice ] = useState<number | undefined>(0)
+    const chainId = useChainId()
+
+    const chains = useChains()
+
+    const [ currentPrice , setCurrentPrice ] = useState<string | undefined>()
+
+    const [ currentEth  , setCurrentEth ] = useState<string | undefined>()
 
     const getCurrentPrice = async () => {
         
         if(!data)return
 
-        const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd").then((res) => res.json())
+        const eth = Number(formatEther(data.value))
 
-        const eth = Number(data.value) / 1000000000000000000
+        setCurrentEth(eth.toFixed(3))
 
-        const price = response.ethereum.usd * eth
+        const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd")
+        if(!response.ok) toast("Failed to fetch the current price of eth")
 
-        setCurrentPrice(Number(price.toFixed(2)))
+        const jsonData : { ethereum : { usd :  number}}  = await response.json()
+
+        const price = jsonData.ethereum.usd * eth
+
+        setCurrentPrice(price.toFixed(2))
+
         
+    }
+
+    const handleRefetch = () => {
+
+        toast("Fetching current balance details...")
+
+        refetch()
+
     }
 
     useEffect( () => {
@@ -44,7 +66,7 @@ function AssetOverview () {
                     </p>
                 </div>
                 <div>
-                    <Button onClick={() => refetch()}>Refresh Balance</Button>
+                    <Button onClick={handleRefetch}>Refresh Balance</Button>
                 </div>
             </div>
 
@@ -58,7 +80,7 @@ function AssetOverview () {
                         </p>
 
                         <h1 className="font-space-mono-bold text-6xl">
-                            ${currentPrice}
+                            ${ chains.find(( chain ) => chain.id === chainId )?.name === "Sepolia" ? 0 : currentPrice}
                         </h1>
                     </div>
 
@@ -78,8 +100,8 @@ function AssetOverview () {
                         </p>
                     </div>
 
-                    <h1 className="text-2xl font-space-mono-regular">
-                        {data && Number(data.value) / 1000000000000000000}
+                    <h1  className="text-2xl font-space-mono-regular">
+                        {currentEth || "0.000"}
                     </h1>
                                     
                 </div>

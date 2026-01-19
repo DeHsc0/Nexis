@@ -87,9 +87,9 @@ function CustomBtn( {props} : { props : { text : string , icon ?:  ForwardRefExo
           ref={bgRef}
           className="absolute w-8 h-8 bg-white rounded-full pointer-events-none z-0 scale-0"
         />
-        <span className="relative z-10 flex items-center gap-2">
+        <span className={`relative z-10 font-manrope-regular flex items-center gap-2 ${!props.icon ? "text-lg" : ""}`}>
         {props.icon && <props.icon className="hover:text-black"/>}
-        { props.image && <img src={props.image}/>}
+        { props.image && <img src={props.image} alt=""/>}
           {props.text}
         </span>
       </button>

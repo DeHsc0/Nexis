@@ -1,4 +1,4 @@
-import { useConnect, useConnectors, type Connector, type CreateConnectorFn } from "wagmi"
+import { useAccount, useConnect, useConnectors, type Connector, type CreateConnectorFn } from "wagmi"
 import { Button } from "./ui/button"
 import {
   Dialog,
@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom"
 function WalletConnector() {
 
   const  { connect , error , status } = useConnect()
+
+  const { isConnected } = useAccount()
 
   const connectors = useConnectors()
 
@@ -36,7 +38,7 @@ function WalletConnector() {
 
   } , [error , status])
   
-  
+  const navigate = useNavigate()
 
   const handleConnection = (connector : Connector<CreateConnectorFn>) => {
 
@@ -50,9 +52,9 @@ function WalletConnector() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <CustomBtn props={{
-          text : "Connect Wallet",
-          handleClick : ()=> setOpen(!open),
-          icon : Wallet
+          text : isConnected ? "Dashboard" : "Connect Wallet",
+          handleClick : isConnected ? () => navigate("/dashboard") : ()=> setOpen(!open),
+          icon : isConnected ? undefined : Wallet
         }}  />
       </DialogTrigger>
       <DialogContent className="flex flex-col gap-7">

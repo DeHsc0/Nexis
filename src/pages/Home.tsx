@@ -4,7 +4,6 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react"
 import { useAccount, useReconnect } from "wagmi";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 
 gsap.registerPlugin(useGSAP)
@@ -15,22 +14,11 @@ export default function Home () {
 
     const { isConnected , isReconnecting  } = useAccount()
 
-    const navigate = useNavigate()
-
     useEffect( () => {
 
-        if(isConnected){
-            
-            navigate("/dashboard")
-            return
-
-        } else if (!isReconnecting) {
-
-            reconnect()
-            return
-        }
-
-    } , [ isConnected , isReconnecting ])
+        if(!isConnected)reconnect()
+        
+    } , [])
 
     return ( 
     <>
