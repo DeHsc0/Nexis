@@ -49,13 +49,19 @@ function Dashboard (){
 
     }    
 
+    const handleDisconnect = () => {
+
+        toast("Wallet Disconnected redirecting to landing page...")
+        disconnect()
+        navigate("/")
+
+    }
+
     useEffect( () => {
 
         if(!isConnected || isDisconnected )navigate("/")
 
         switchChain.mutate({ chainId : selectedChain.id})
-
-        
 
     } , [])
 
@@ -92,7 +98,7 @@ function Dashboard (){
                         </SelectGroup>
                     </SelectContent>
                 </Select>
-                <Button onClick={() => disconnect()} className="" size={"lg"} variant={"outline"}>
+                <Button onClick={handleDisconnect} className="" size={"lg"} variant={"outline"}>
                     <Wallet/>
                     Disconnect Wallet
                 </Button>
